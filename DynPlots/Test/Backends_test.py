@@ -83,20 +83,23 @@ class MyTestCase(unittest.TestCase):
         with open(self.template_DUMP,"r",encoding="utf-8") as f:
             template_text_lines = f.readlines()
             self.dealers = TemplateDealer.retrieve_dealers(template_text_lines)
+            
+            # according the template dealer start and end index to replace the identifiers in each line by
+            # the deal_way defined in the template dealer.
             for dealer in self.dealers:
                 start = dealer.start_index
-                for line in template_text_lines[start:]:
-                    for match in re.finditer(self.key_pattern,line):
-                        keys=match.groupdict()
-                        keys =match.groups()
-                    for match in re.finditer(self.value_ex_pattern,line):
-                        values=match.groupdict()
-                        values=match.groups()
-                    for match in re.finditer(self.data_pattern,line):
-                        data=match.groupdict()
-                        data=match.groups()
-                    
+                end = dealer.end_index
+                for line in template_text_lines[start:end]:
+                    self.replace_match(self.key_pattern,line)
+                    self.replace_match(self.value_ex_pattern,line)
+                    self.replace_match(self.data_pattern,line)
             self.assertEqual(3, 3, "1 + 2 should be equal to 3")
+
+
+    def replace_match(self,pattern:re.Pattern[str], line:str):
+        for match in re.finditer(pattern,line):
+            groupdict = match.groupdict()
+            groups = match.groups()
 
 
     def test_subtraction(self):
