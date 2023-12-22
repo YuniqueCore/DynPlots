@@ -11,6 +11,9 @@ with open(PLOTs_NAME_SOURCE,"r",encoding="utf-8") as f:
     PLOTs_NAME = [l.strip() for l in f.readlines()]
 
 
+
+
+
 class DumpDataLoader(object):
     raw_data=""
     
@@ -43,7 +46,7 @@ class DataProcessor:
 
         self.process_template()
         
-    def _start_end_with(line:str,identifier:str):
+    def _start_end_with(line:str,identifier:str)->bool:
             if line.startswith(identifier) and line.endswith(identifier):
                 return True
             return False
@@ -84,7 +87,7 @@ class DataProcessor:
         
             
         for line in actual_data_lines:
-            if start_end_with(line,'=-=')  or start_end_with(line,'<|>'):
+            if self._start_end_with(line,'=-=')  or self._start_end_with(line,'<|>'):
                 continue
             elif line.strip() == "":
                 data_start = True
